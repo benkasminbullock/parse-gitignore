@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-Parse::Gitignore - abstract here.
+Parse::Gitignore - parse a .gitignore file
 
 =head1 SYNOPSIS
 
@@ -11,7 +11,25 @@ Parse::Gitignore - abstract here.
 
 =head1 DESCRIPTION
 
-=head1 FUNCTIONS
+Parse a .gitignore file and check whether a file matches it.
 
-=cut
+=head1 METHODS
+
+=head2 new
+
+    my $pg = Parse::Gitignore->new ('./.gitignore');
+
+=head2 ignored
+
+    if ($pg->ignored ('./Makefile')) {
+	print "Makefile is ignored.\n";
+    }
+
+Check whether a file matches a .gitignore.
+
+=head1 HISTORY
+
+I wrote this because I wanted to have a way to ignore generated files
+for a desktop file search application.
+
 [% INCLUDE "author" %]

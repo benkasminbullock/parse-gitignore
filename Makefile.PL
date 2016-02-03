@@ -14,6 +14,7 @@ WriteMakefile (
     AUTHOR => 'Ben Bullock <bkb@cpan.org>',
     LICENSE => 'perl',
     PREREQ_PM => {
+	'Path::Tiny' => '0.076',
     },
     META_MERGE => {
 	'meta-spec' => {
