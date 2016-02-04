@@ -9,11 +9,15 @@ use warnings;
 use strict;
 use Carp;
 use Path::Tiny;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
-sub get_ignored_files
+sub read_gitignore
 {
     my ($obj, $gitignore_file) = @_;
+    if (! -f $gitignore_file) {
+	carp ".gitignore file $gitignore_file doesn't exist";
+	return undef;
+    }
     my $file = path ($gitignore_file);
     $obj->{file} = $file;
     my @lines = $file->lines ();
@@ -27,19 +31,19 @@ sub get_ignored_files
 	    $ignored{$pignored_file} = 1;
 	}
     }
-    $obj->{ignored} = \%ignored;
+    for my $k (keys %ignored) {
+	$obj->{ignored}{$k} = 1;
+    }
 }
 
 sub new
 {
     my ($class, $gitignore_file) = @_;
-    if (! -f $gitignore_file) {
-	carp ".gitignore file $gitignore_file doesn't exist";
-	return undef;
-    }
-    my $obj = {};
+    my $obj = {ignored => {}};
     bless $obj, $class;
-    $obj->get_ignored_files ($gitignore_file);
+    if ($gitignore_file) {
+	$obj->read_gitignore ();
+    }
     return $obj;
 }
 
