@@ -22,6 +22,9 @@ sub read_gitignore
     $obj->{file} = $file;
     my @lines = $file->lines ();
     my %ignored;
+    if ($obj->{excludesfile}) {
+	push @lines, @{$obj->{excludesfile}};
+    }
     for my $line (@lines) {
 	if ($line =~ /^\s*#/) {
 	    next;
@@ -36,13 +39,33 @@ sub read_gitignore
     }
 }
 
+sub excludesfile
+{
+    my ($obj, $excludesfile) = @_;
+    if (! -f $excludesfile) {
+	carp "No such excludesfile: $excludesfile";
+	return;
+    }
+    my $file = path ($excludesfile);
+    $obj->{file} = $file;
+    my @lines = $file->lines ();
+    my @oklines;
+    for (@lines) {
+	if (/^\s*(#|$)/) {
+	    next;
+	}
+	push @oklines, $_;
+    }
+    $obj->{excludesfile} = \@oklines;
+}
+
 sub new
 {
     my ($class, $gitignore_file) = @_;
     my $obj = {ignored => {}};
     bless $obj, $class;
     if ($gitignore_file) {
-	$obj->read_gitignore ();
+	$obj->read_gitignore ($gitignore_file);
     }
     return $obj;
 }

@@ -34,6 +34,13 @@ Check whether a file matches a .gitignore.
 Read a F<.gitignore> file. You can read as many as you like and they
 are accumulated.
 
+=head2 excludesfile
+
+    $pg->excludesfile ('/home/user/.gitignore');
+
+Read an excludesfile which is applied to all directories where .git is
+found.
+
 =head1 HISTORY
 
 I wrote this because I wanted to have a way to ignore generated files
