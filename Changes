@@ -1,5 +1,9 @@
 Revision history for Perl module Parse::Gitignore
 
+0.03 2017-02-01
+
+- Add directories to object
+
 0.02 2016-02-04
 
 - Testing problem resolved

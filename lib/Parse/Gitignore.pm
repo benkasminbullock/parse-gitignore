@@ -1,26 +1,21 @@
 package Parse::Gitignore;
-require Exporter;
-@ISA = qw(Exporter);
-@EXPORT_OK = qw//;
-%EXPORT_TAGS = (
-    all => \@EXPORT_OK,
-);
 use warnings;
 use strict;
 use Carp;
 use Path::Tiny;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub read_gitignore
 {
     my ($obj, $gitignore_file) = @_;
     if (! -f $gitignore_file) {
 	carp ".gitignore file $gitignore_file doesn't exist";
-	return undef;
+	return;
     }
     my $file = path ($gitignore_file);
     $obj->{file} = $file;
     my @lines = $file->lines ();
+    # Hash of ignored files.
     my %ignored;
     if ($obj->{excludesfile}) {
 	push @lines, @{$obj->{excludesfile}};
@@ -51,6 +46,7 @@ sub excludesfile
     my @lines = $file->lines ();
     my @oklines;
     for (@lines) {
+	# Skip comments and empty lines.
 	if (/^\s*(#|$)/) {
 	    next;
 	}

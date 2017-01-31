@@ -17,3 +17,4 @@ ppport.h
 lib/Parse/Gitignore.pod
 MANIFEST
 README
+examples/*-out.txt
