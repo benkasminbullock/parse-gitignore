@@ -15,3 +15,4 @@ MYMETA..*
 ^make-pod\.pl$
 ^lib/.*\.pod\.tmpl$
 ^examples/.*-out\.txt$
+^Todo$
