@@ -6,11 +6,11 @@ use Carp;
 use File::Basename;
 use File::Slurper 'read_lines';
 use File::Spec;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub read_gitignore
 {
-    my ($obj, $gitignore_file, %options) = @_;
+    my ($obj, $gitignore_file) = @_;
     if (! -f $gitignore_file) {
 	carp ".gitignore file $gitignore_file doesn't exist";
 	return;
