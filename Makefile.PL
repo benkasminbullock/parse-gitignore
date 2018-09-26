@@ -14,7 +14,6 @@ WriteMakefile (
     AUTHOR => 'Ben Bullock <bkb@cpan.org>',
     LICENSE => 'perl',
     PREREQ_PM => {
-	'File::Basename' => '2.84',
 	'File::Slurper' => '0.010',
 	'File::Spec' => '3.40',
     },

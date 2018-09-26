@@ -2,11 +2,10 @@ package Parse::Gitignore;
 use warnings;
 use strict;
 use Carp;
-#use Path::Tiny;
-use File::Basename;
 use File::Slurper 'read_lines';
 use File::Spec;
-our $VERSION = '0.04';
+
+our $VERSION = '0.05';
 
 sub read_gitignore
 {
