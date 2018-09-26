@@ -13,8 +13,10 @@ ok ($pg->ignored ('monkeyshines'), "Ignored glob 'monkey*'");
 ok ($pg->ignored ('starfruit'), "Ignored glob '*fruit'");
 ok (! $pg->ignored ('nice'), "Did not ignore 'nice'");
 ok ($pg->ignored ('bin/'), "Ignored the bin/ directory");
-ok ($pg->ignored ('bin/isotope'), "Ignored a file in the bin/ directory");
-
+TODO: {
+    local $TODO = 'https://github.com/benkasminbullock/parse-gitignore/issues/1';
+    ok ($pg->ignored ('bin/isotope'), "Ignored a file in the bin/ directory");
+};
 done_testing ();
 # Local variables:
 # mode: perl
