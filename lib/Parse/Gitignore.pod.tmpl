@@ -36,6 +36,10 @@ Parse a .gitignore file and check whether a file matches it.
 
     my $pg = Parse::Gitignore->new ('./.gitignore');
 
+To get messages on what it is doing, set C<verbose> to a true value:
+
+    my $pg = Parse::Gitignore->new ('./.gitignore', verbose => 1);
+
 =head2 ignored
 
     if ($pg->ignored ('./Makefile')) {
@@ -64,9 +68,15 @@ found.
 
 =item L<Carp>
 
-=item L<File::Slurper>
+Used to report errors.
+
+=item L<File::Slurper/read_lines>
+
+Used to read the gitignore file.
 
 =item L<File::Spec>
+
+Used to disambiguate file path names.
 
 =back
 
