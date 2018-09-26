@@ -16,13 +16,13 @@ sub read_gitignore
 	return;
     }
     if ($obj->{verbose}) {
-	print "Reading $gitignore_file.\n";
+	debugmsg ("Reading $gitignore_file.");
     }
     push @{$obj->{files}}, $gitignore_file;
     my @lines = read_lines ($gitignore_file);
     my (undef, $dir, undef) = File::Spec->splitpath ($gitignore_file);
     if ($obj->{verbose}) {
-	print "Directory is $dir.\n";
+	debugmsg ("Directory is '$dir'.");
     }
     # Hash of ignored files.
     for my $line (@lines) {
@@ -31,13 +31,22 @@ sub read_gitignore
 	    next;
 	}
 	if ($obj->{verbose}) {
-	    print "Processing $line in $dir.\n";
+	    debugmsg ("Processing '$line' in '$dir'.");
+	}
+	if ($line =~ m!/$!) {
+	    for my $ignored_file (glob ("$line/*")) {
+		my $pignored_file = File::Spec->rel2abs ($ignored_file);
+		if ($obj->{verbose}) {
+		    debugmsg ("Ignoring '$pignored_file' in '$dir'.");
+		}
+		$obj->{ignored}{$pignored_file} = 1;
+	    }
+	    next;
 	}
 	for my $ignored_file (glob ($line)) {
-#	    print "ignore '$ignored_file'\n";
 	    my $pignored_file = File::Spec->rel2abs ($ignored_file);
 	    if ($obj->{verbose}) {
-		print "$dir Ignoring '$pignored_file'.\n";
+		debugmsg ("Ignoring '$pignored_file' in '$dir'.");
 	    }
 	    $obj->{ignored}{$pignored_file} = 1;
 	}
@@ -77,7 +86,7 @@ sub new
     bless $obj, $class;
     if ($gitignore_file) {
 	if ($obj->{verbose}) {
-	    print "Reading '$gitignore_file'.\n";
+	    debugmsg ("Reading '$gitignore_file'.");
 	}
 	$obj->read_gitignore ($gitignore_file);
     }
@@ -89,6 +98,13 @@ sub ignored
     my ($obj, $file) = @_;
     $file = File::Spec->rel2abs ($file);
     return $obj->{ignored}{$file};
+}
+
+sub debugmsg
+{
+    my (undef, $file, $line) = caller (0);
+    $file =~ s!.*/!!;
+    print "$file:$line: @_\n";
 }
 
 1;
