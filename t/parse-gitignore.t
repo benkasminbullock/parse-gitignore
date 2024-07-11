@@ -17,6 +17,7 @@ ok (! $pg->ignored ('nice'), "Did not ignore 'nice'");
 #    local $TODO = 'https://github.com/benkasminbullock/parse-gitignore/issues/1';
 ok ($pg->ignored ('bin/isotope'), "Ignored a file in the bin/ directory");
 #};
+ok ($pg->ignored ('bigger'), "Ignored a text file");
 done_testing ();
 # Local variables:
 # mode: perl
