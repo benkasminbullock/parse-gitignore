@@ -5,7 +5,7 @@ use Carp;
 use File::Slurper 'read_lines';
 use File::Spec;
 
-our $VERSION = '0.06';
+our $VERSION = '1.0';
 
 sub read_gitignore
 {
