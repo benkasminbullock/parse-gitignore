@@ -7,18 +7,17 @@ use Parse::Gitignore;
 use FindBin '$Bin';
 chdir "$Bin/test-files" or die "Cannot chdir to test directory: $!";
 my $pg = Parse::Gitignore->new (
-    'test-gitignore',
+    "$Bin/test-files/test-gitignore",
     verbose => 1,
+    
 );
 ok ($pg->ignored ('monkeyshines'), "Ignored glob 'monkey*'");
 ok ($pg->ignored ('starfruit'), "Ignored glob '*fruit'");
 ok (! $pg->ignored ('nice'), "Did not ignore 'nice'");
-#TODO: {
-#    local $TODO = 'https://github.com/benkasminbullock/parse-gitignore/issues/1';
 ok ($pg->ignored ('bin/isotope'), "Ignored a file in the bin/ directory");
-#};
 ok ($pg->ignored ('bigger'), "Ignored a text file");
 done_testing ();
+
 # Local variables:
 # mode: perl
 # End:

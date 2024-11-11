@@ -5,11 +5,14 @@ use Carp;
 use File::Slurper 'read_lines';
 use File::Spec;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 sub read_gitignore
 {
     my ($obj, $gitignore_file) = @_;
+    if (-d $gitignore_file) {
+	$gitignore_file = "$gitignore_file/.gitignore";
+    }
     if (! -f $gitignore_file) {
 	carp ".gitignore file $gitignore_file doesn't exist";
 	return;
@@ -30,11 +33,14 @@ sub read_gitignore
 	    next;
 	}
 	if ($obj->{verbose}) {
-	    debugmsg ("Processing '$line' in '$dir'.");
+	    debugmsg ("Processing line '$line' in '$dir'.");
 	}
 	if ($line =~ m!/$!) {
+	    if ($obj->{verbose}) {
+		debugmsg ("Looking at a directory");
+	    }
 	    for my $ignored_file (glob ("$line/*")) {
-		my $pignored_file = File::Spec->rel2abs ($ignored_file);
+		my $pignored_file = tidyfile ("$dir/$ignored_file");
 		if ($obj->{verbose}) {
 		    debugmsg ("Ignoring '$pignored_file' in '$dir'.");
 		}
@@ -43,13 +49,20 @@ sub read_gitignore
 	    next;
 	}
 	for my $ignored_file (glob ($line)) {
-	    my $pignored_file = File::Spec->rel2abs ($ignored_file);
+	    my $pignored_file = tidyfile ("$dir/$ignored_file");
 	    if ($obj->{verbose}) {
 		debugmsg ("Ignoring '$pignored_file' in '$dir'.");
 	    }
 	    $obj->{ignored}{$pignored_file} = 1;
 	}
     }
+}
+
+sub tidyfile
+{
+    my ($file) = @_;
+    $file =~ s!//+!/!g;
+    return $file;
 }
 
 sub excludesfile
@@ -96,6 +109,11 @@ sub ignored
 {
     my ($obj, $file) = @_;
     $file = File::Spec->rel2abs ($file);
+    if ($obj->{verbose}) {
+	if ($obj->{ignored}{$file}) {
+	    debugmsg ("$file is marked as ignored");
+	}
+    }
     return $obj->{ignored}{$file};
 }
 

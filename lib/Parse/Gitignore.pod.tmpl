@@ -52,8 +52,19 @@ Check whether a file matches a .gitignore.
 
     $pg->read_gitignore ('.gitignore');
 
-Read a F<.gitignore> file. You can read as many as you like and they
-are accumulated.
+Read a F<.gitignore> file. Because different directories in the same
+git repository may feature their own F<.gitignore> files, the
+information is accumulated in C<$pg> along with the specific directory
+of the gitignore file relative to the top directory of the repository,
+for example
+
+    $pg->read_gitignore ("$top/.gitignore");
+    $pg->read_gitignore ("$top/src/.gitignore");
+
+If the suggested F<.gitignore> does not actually exist, a warning is
+printed and processing continues. If the argument is a directory, the
+module assumes that you intended to read a file called F<.gitignore>
+in that directory.
 
 =head2 excludesfile
 
@@ -94,5 +105,9 @@ Used to disambiguate file path names.
 
 I wrote this because I wanted to have a way to ignore generated files
 for a desktop file search application.
+
+Version 1.0 changes the way that subdirectories are dealt with. The
+older versions turned out to have a problem whereby files in
+subdirectories were not picked up correctly.
 
 [% INCLUDE "author" %]
